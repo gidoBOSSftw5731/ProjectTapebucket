@@ -19,8 +19,8 @@ func AddToDB(text, identity *string, db *sql.DB) (string, error) {
 	url := textHash[:URLLen]
 
 	test := db.QueryRow("SELECT hash FROM tapebucket WHERE url=?", url)
-	switch {
-	case test.Scan().Error() == fmt.Sprint(sql.ErrNoRows):
+	switch test.Scan().Error() {
+	case fmt.Sprint(sql.ErrNoRows):
 		log.Debug("New paste, adding..")
 		_, err := db.Exec("INSERT INTO tapebucket VALUES(?, ?, ?, ?)",
 			*text, textHash, url, *identity)
@@ -30,7 +30,8 @@ func AddToDB(text, identity *string, db *sql.DB) (string, error) {
 
 		//defer insert.Close()
 		log.Debug("Added paste to table")
-	case test.Scan().Error() != "":
+	case "":
+	default:
 		return "", fmt.Errorf(test.Scan().Error())
 	}
 
