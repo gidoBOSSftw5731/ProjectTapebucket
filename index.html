@@ -73,12 +73,12 @@
     <button class="btn btn-info" onclick="showPopup()">Encrypt</button>
     <button class="btn btn-info" onclick="showPopupDecrypt()">Decrypt</button>
     <button class="btn btn-info" onclick=uploadPaste()>Upload!</button>
-    <textarea class="prettyprint" id="paste" placeholder="[ paste text ]" spellcheck="false">{{.Paste}}</textarea>
+    <pre class="code"><code><textarea class="prettyprint" id="paste" placeholder="[ paste text ]" spellcheck="false">{{.Paste}}</textarea></code></pre>
 
 
     <div id="popup">
         <div>Enter Password:</div>
-        Warning: Once you press done, no one can decrypt this without the password.
+        <h1 id="passwordwarning">Warning: Once you press done, no one can decrypt this without the password.</h1>
         <input id="pass" type="password" />
         <button onclick="done()">Done</button>
         <button onclick="this.parentElement.style.display='none'">Cancel</button>
