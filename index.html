@@ -1,0 +1,94 @@
+<!DOCTYPE html><html>
+    <head>
+    <title>TapeBucket</title>
+    <link href="/css/paste.css" rel="stylesheet" type="text/css" />
+    <link href="/css/solarized.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/crypto-js.min.js"></script>
+
+</head>
+
+<body>
+
+    <script>
+        function uploadPaste() {
+            var request = new XMLHttpRequest();
+            request.open("POST", "/submitpaste")
+            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            request.timeout = 10000; // timeout in ms, 10 seconds
+
+            request.onload = function() { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE) {
+                    // Request finished. Do processing here.
+                    console.log(this)
+                    if (this.status != 200) {
+                        alert("error: " + this.responseText)
+                        return
+                    }
+                    window.location = this.responseText
+                }
+            }
+
+            request.send(JSON.stringify({
+                paste: document.getElementById("paste").value
+            }))
+
+        }
+
+        function encrypt(password) {
+            document.getElementById("paste").value = CryptoJS.AES.encrypt(
+                document.getElementById("paste").value, password)
+        }
+
+        function decrypt(password) {
+            document.getElementById("paste").value = CryptoJS.AES.decrypt(
+                document.getElementById("paste").value, password).toString(CryptoJS.enc.Utf8)
+        }
+
+        function done() {
+            encrypt(document.getElementById("pass").value);
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("pass").value = ""
+
+        };
+
+        function done2() {
+            decrypt(document.getElementById("pass2").value);
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("pass2").value = ""
+
+        };
+
+        function showPopup() {
+            document.getElementById("popup").style.display = "block";
+        }
+
+        function showPopupDecrypt() {
+            document.getElementById("popupDecrypt").style.display = "block";
+
+        }
+    </script>
+
+
+    <button class="btn btn-info" onclick="showPopup()">Encrypt</button>
+    <button class="btn btn-info" onclick="showPopupDecrypt()">Decrypt</button>
+    <button class="btn btn-info" onclick=uploadPaste()>Upload!</button>
+    <textarea class="prettyprint" id="paste" placeholder="[ paste text ]" spellcheck="false">{{.Paste}}</textarea>
+
+
+    <div id="popup">
+        <div>Enter Password:</div>
+        Warning: Once you press done, no one can decrypt this without the password.
+        <input id="pass" type="password" />
+        <button onclick="done()">Done</button>
+        <button onclick="this.parentElement.style.display='none'">Cancel</button>
+    </div>
+    <div id="popupDecrypt">
+        <div>Enter Password:</div>
+        <input id="pass2" type="password" />
+        <button onclick="done2()">Done</button>
+        <button onclick="this.parentElement.style.display='none'">Cancel</button>
+
+    </div>
+
+</body></html>

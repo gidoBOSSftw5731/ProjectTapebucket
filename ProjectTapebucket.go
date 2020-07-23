@@ -13,26 +13,29 @@ const (
 )
 
 // AddToDB adds a block of text to the database and returns both the url and error
+// database should be mysql
 func AddToDB(text, identity *string, db *sql.DB) (string, error) {
 	textHash := fmt.Sprintf("%x", sha256.Sum256([]byte(*text)))
 
 	url := textHash[:URLLen]
+	log.Traceln(textHash)
 
-	test := db.QueryRow("SELECT hash FROM tapebucket WHERE url=?", url)
-	switch test.Scan().Error() {
-	case fmt.Sprint(sql.ErrNoRows):
+	var out bool
+	err := db.QueryRow("SELECT 1 FROM tapebucket WHERE url=?", url).Scan(&out)
+	switch err {
+	case sql.ErrNoRows:
 		log.Debug("New paste, adding..")
 		_, err := db.Exec("INSERT INTO tapebucket VALUES(?, ?, ?, ?)",
 			*text, textHash, url, *identity)
 		if err != nil {
-			return "", fmt.Errorf(test.Scan().Error())
+			return "", err
 		}
 
 		//defer insert.Close()
 		log.Debug("Added paste to table")
-	case "":
+	case nil:
 	default:
-		return "", fmt.Errorf(test.Scan().Error())
+		return "", err
 	}
 
 	return url, nil
@@ -46,9 +49,17 @@ func ReturnFromDB(url string, db *sql.DB) (*string, error) {
 	// so now we know the URL could be valid
 
 	var paste string
-	err := db.QueryRow("SELECT hash FROM tapebucket WHERE url=?", url).Scan(&paste)
+	err := db.QueryRow("SELECT paste FROM tapebucket WHERE url=?", url).Scan(&paste)
 	if err != nil {
 		return nil, err
 	}
 	return &paste, nil
 }
+
+/*
+CREATE TABLE tapebucket (
+	paste LONGTEXT,
+	hash char(64),
+	url char(8),
+	identity tinytext);
+*/
