@@ -62,37 +62,38 @@
         };
 
         function showPopup() {
-            document.getElementById("popup").style.display = "flex";
+            document.getElementById("popup").style.display = "block";
         }
 
         function showPopupDecrypt() {
-            document.getElementById("popupDecrypt").style.display = "flex";
-
+            document.getElementById("popupDecrypt").style.display = "block";
         }
-
     </script>
-
 
     <button class="btn btn-info" onclick="showPopup()">Encrypt</button>
     <button class="btn btn-info" onclick="showPopupDecrypt()">Decrypt</button>
     <button class="btn btn-info" onclick=uploadPaste()>Upload!</button>
-    <pre class="code"><code><textarea class="prettyprint" id="paste" placeholder="[ paste text ]" spellcheck="false">{{.Paste}}</textarea></code></pre>
-
-
     <div id="popup">
-        <div>Enter Password:</div>
-        <h1 id="passwordwarning">Warning: Once you press done, no one can decrypt this without the password.</h1>
-        <input id="pass" type="password" />
-        <button onclick="done()">Done</button>
-        <button onclick="this.parentElement.style.display='none'">Cancel</button>
+        <div id="passwordwarning">
+            <h1>Warning: Once you press done, no one can decrypt this without the password.
+                Not even a site admin.</h1>
+        </div>
+        <div id="passbox">
+            <input id="pass" type="password" placeholder="Password" />
+        </div>
+        <br>
+        <button onclick="done()" class="btn">Done</button>
+        <button onclick="this.parentElement.style.display='none'" class="btn">Cancel</button>
     </div>
     <div id="popupDecrypt">
-        <div>Enter Password:</div>
-        <input id="pass2" type="password" />
-        <button onclick="done2()">Done</button>
-        <button onclick="this.parentElement.style.display='none'">Cancel</button>
+        <div id="passbox">
+            <input id="pass2" type="password" placeholder="Password" />
+        </div>
+        <button class="btn" onclick="done2()">Done</button>
+        <button class="btn" onclick="this.parentElement.style.display='none'">Cancel</button>
     </div>
+    <pre class="code">
+    <code><textarea class="prettyprint" id="paste" placeholder="[ paste text ]" spellcheck="false">{{.Paste}}</textarea></code>
+    </pre>
 
-</body>
-
-</html>
+</body></html>

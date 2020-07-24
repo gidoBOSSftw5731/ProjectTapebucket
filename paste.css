@@ -7,7 +7,7 @@ html {
     margin: 0;
     width: 100%;
     overflow: auto;
-
+    text-indent: 0px;
 }
 
 textarea,
@@ -21,10 +21,9 @@ textarea,
     resize: none;
     font-family: monospace;
     font-size: 16px;
-    top: 51px;
     right: 2em;
-    bottom: 2em;
     left: 4em;
+    z-index: 1;
 }
 
 @-moz-document url-prefix() {
@@ -35,13 +34,14 @@ textarea,
 }
 
 pre {
-    font-family: monospace;
+    z-index: 1;
     font-size: 16px;
     top: 1em;
     right: 2em;
     bottom: 2em;
     left: 1.5em;
     height: 100%;
+    padding: 0px;
 }
 
 /*
@@ -52,28 +52,47 @@ pre {
 
 #popup,
 #popupDecrypt {
-    width: 40%;
+    z-index: 2;
+
+    width: 50%;
     height: 40%;
-    padding: 20px;
+
+    padding-top: 0px;
+    padding-left: 5%;
+    padding-right: 5%;
     background-color: #001018;
-    top: 20%;
+    top: 0%;
     left: 20%;
+    right: 20%;
     display: none;
     border-color: lightgray;
     border: 1%;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
 }
 
+#popupDecrypt {
+    height: 10%;
 
-
-#passwordwarning {
-    background-color: #F00;
-    color: aqua;
+    padding-top: 2%;
 }
+
 
 .btn {
     padding-bottom: 10px;
+    z-index: 1;
+}
+
+#passbox {
+    width: 60%
+}
+
+#pass {
+    width: 100%;
+}
+
+#passwordwarning {
+    width: 40%;
+    background-color: #F00;
+    color: aqua;
 }
